@@ -43,7 +43,7 @@ for line in subs:
 
 print "Number of times the word fuck is used in The Wolf of Wall Street -> " + str(fuck_count)
 
-## Tested OK uptil here.
+## Tested OK uptil here - Parsing issues fixed
 
 clips = []  
 for word in slang :
