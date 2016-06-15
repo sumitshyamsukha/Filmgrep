@@ -1,18 +1,21 @@
 from moviepy.editor import *
 
-clip = VideoFileClip("wows.mp4") # create a video clip object from moviepy based on the given file
+clip = VideoFileClip("wows.mp4")
 
 subs = open("wows.srt", "r") 
 
-word_times = {}
+key_word = "fuck"
+key_word_count = 0
+movie = "The Wolf of Wall Street"
 
-slang = ["fuck", "fucker", "fucking", "fucked", "fucks", "fuckers", "motherfucker", 
-         "motherfuckers", "motherfuck", "motherfucking", "fuckety", "fuckload", 
-         "fuckhead", "fuckheads", "fuckloads", "fucktard", "fuckturd"]
+word_times = {}
+word_times[key_word] = []
+
+word_list = ["fuck", "fucker", "fucking", "fucked", "fucks", "fuckers", "motherfucker", 
+             "motherfuckers", "motherfuck", "motherfucking", "fuckety", "fuckload", 
+             "fuckhead", "fuckheads", "fuckloads", "fucktard", "fuckturd"]
 
 delimiters = ["<i>", "</i>", ".", "!", ",", "'", "?"]
-
-fuck_count = 0
 
 for line in subs:
 	line = line.strip() 
@@ -30,29 +33,25 @@ for line in subs:
 			line2 = line2.replace("-", " ") # special delimiter
 			text = line1 + " " + line2
 		text = text.strip()
-		text = " ".join(text.split())
-		words = text.split() # split text up into words
-		for word in words: # add each word into the dict
+		text = " ".join(text.split()) # remove multiple spaces between words
+		words = text.split()
+		seen = false
+		for word in words: 
 			word = word.lower()
-			if word in slang:
-				fuck_count = fuck_count + 1
-			if word in word_times:
-				word_times[word].append(line)
-			else:
-				word_times[word] = [line]
+			if word in word_list: # for each word in word_list
+				key_word_count = key_word_count + 1 #increment count
+				if seen == false : 
+					word_times[key_word].append(line)
+					seen = true # Don't add the same time interval more than once!
 
-print "Number of times the word fuck is used in The Wolf of Wall Street -> " + str(fuck_count)
-
-## Tested OK uptil here - Parsing issues fixed
+print key_word + " appears in " + movie + " " + str(key_word_count) + " times "
 
 clips = []  
-for word in slang :
-	for time in word_times[word]:
-		split = time.index("--> ") 
-		start = time[0: split]
-		end = time[split + len(split): ]
-		clips.append(clip.subclip(start, end)) 
-## Yet to test the above section
+for time in word_times[key_word]:
+	split = time.index("--> ") 
+	start = time[0: split]
+	end = time[split + len(split): ]
+	clips.append(clip.subclip(start, end)) 
 
 final_clip = concatenate_videoclips(clips)
 final_clip.write_videofile("out.mp4") 
