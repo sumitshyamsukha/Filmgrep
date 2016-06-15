@@ -35,14 +35,14 @@ for line in subs:
 		text = text.strip()
 		text = " ".join(text.split()) # remove multiple spaces between words
 		words = text.split()
-		seen = false
+		seen = False
 		for word in words: 
 			word = word.lower()
 			if word in word_list: # for each word in word_list
 				key_word_count = key_word_count + 1 #increment count
-				if seen == false : 
+				if seen == False : 
 					word_times[key_word].append(line)
-					seen = true # Don't add the same time interval more than once!
+					seen = True # Don't add the same time interval more than once!
 
 print key_word + " appears in " + movie + " " + str(key_word_count) + " times "
 
@@ -50,7 +50,7 @@ clips = []
 for time in word_times[key_word]:
 	split = time.index("--> ") 
 	start = time[0: split]
-	end = time[split + len(split): ]
+	end = time[split + 4: ]
 	clips.append(clip.subclip(start, end)) 
 
 final_clip = concatenate_videoclips(clips)
