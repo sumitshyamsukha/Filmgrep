@@ -1,4 +1,5 @@
 from moviepy.editor import *
+from nltk.corpus import stopwords
 
 clip = VideoFileClip("wows.mp4")
 
@@ -35,8 +36,9 @@ for line in subs:
 		text = text.strip()
 		text = " ".join(text.split()) # remove multiple spaces between words
 		words = text.split()
+		filtered_words = [word for word in words if word not in stopwords.words("english")] # filter stop words
 		seen = False
-		for word in words: 
+		for word in filtered_words: 
 			word = word.lower()
 			if word in word_list: # for each word in word_list
 				key_word_count = key_word_count + 1 #increment count
