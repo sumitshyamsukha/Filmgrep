@@ -16,6 +16,8 @@ word_list = ["fuck", "fucker", "fucking", "fucked", "fucks", "fuckers", "motherf
              "motherfuckers", "motherfuck", "motherfucking", "fuckety", "fuckload", 
              "fuckhead", "fuckheads", "fuckloads", "fucktard", "fuckturd"]
 
+non_stop_words = []
+
 delimiters = ["<i>", "</i>", ".", "!", ",", "'", "?"]
 
 for line in subs:
@@ -40,13 +42,19 @@ for line in subs:
 		seen = False
 		for word in filtered_words: 
 			word = word.lower()
+			non_stop_words.append(word)
 			if word in word_list: # for each word in word_list
 				key_word_count = key_word_count + 1 #increment count
 				if seen == False : 
 					word_times[key_word].append(line)
 					seen = True # Don't add the same time interval more than once!
 
+
 print key_word + " appears in " + movie + " " + str(key_word_count) + " times "
+print "Total number of words = " + str(len(non_stop_words))
+print "Number of distinct words = " + str(len(set(non_stop_words)))
+print "Richness of Vocabulary = " + str(len(set(non_stop_words)) * 1.0 / len(non_stop_words))
+
 
 clips = []  
 for time in word_times[key_word]:
